@@ -237,7 +237,21 @@ def read_message(content)->str:
         message = data_encoder(message)
     else:
         print("body has no data.")
-        print(content)
+    return message
+
+def read_message_html(content)->str:
+    message = None
+    if "data" in content['payload']['body']:
+        message = content['payload']['body']['data']
+        message = data_encoder(message)
+
+    elif "data" in content['payload']['parts'][0]['body']:
+        for p in content['payload']['parts']:
+            if p['mimeType'] == 'text/html':
+                message = p['body']['data']
+                message = data_encoder(message)
+    else:
+        print("body has no data.")
     return message
 
 def read_snippet(content)->str:
